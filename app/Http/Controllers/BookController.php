@@ -38,8 +38,8 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'isbn' => 'required|alpha_num',
+            'name'  => 'required|max:255',
+            'isbn'  => 'required|alpha_num',
             'price' => 'required|numeric',
         ]);
 
@@ -67,7 +67,9 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        //
+        $book = Book::findOrFail($id);
+
+        return view('books.edit', compact('book'));
     }
 
     /**
@@ -79,7 +81,15 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'name'  => 'required|max:255',
+            'isbn'  => 'required|alpha_num',
+            'price' => 'required|numeric',
+        ]);
+
+        Book::whereId($id)->update($validatedData);
+
+        return redirect('/books')->with('success', 'Book is successfully updated');
     }
 
     /**
